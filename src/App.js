@@ -41,6 +41,7 @@ class App extends React.Component {
     this.applyUserInformations = this.applyUserInformations.bind(this);
     this.applySelectedChatInformations = this.applySelectedChatInformations.bind(this);
     this.getSelectedChatInformations = this.getSelectedChatInformations.bind(this);
+    this.applyChats = this.applyChats.bind(this);
     this.connectSocket = this.connectSocket.bind(this);
   }
 
@@ -54,6 +55,10 @@ class App extends React.Component {
       isLogged: true,
       connectedSocket: false
     });
+  }
+  applyChats(chats){
+    this.chats = chats;
+    this.setState({});
   }
 
   connectSocket() {
@@ -82,8 +87,23 @@ class App extends React.Component {
           targetID: data.targetID,
           message: data.message
         });
+        this.setState({
+          page: "chat"
+        });
+      });
+      this.socket.on("CLIENT-NEW_CHAT",data => {
+        this.socket.emit("SERVER-CONNECT_ALL_OF-ROOMS", {
+          roomNames: [data.chat[0].roomName]
+        });
+        if(this.chats.length == 0){
+         this.chats = data.chat;
+        }else{
+          this.chats.push(data.chat[0]);
+        }
         this.setState({});
       });
+
+
     });
   }
 
@@ -123,7 +143,6 @@ class App extends React.Component {
   }
 
 
-
   checkIsUserLogged() {
     let isLogged = false;
     if (this.isLogged) {
@@ -139,6 +158,7 @@ class App extends React.Component {
 
 
   render() {
+    
     let page = this.state.page;
     if (this.isLogged) {
       page = "chat";
@@ -167,6 +187,8 @@ class App extends React.Component {
                 applySelectedChatInformations={this.applySelectedChatInformations}
                 getSelectedChatInformations={this.getSelectedChatInformations}
                 getChats={this.getChats}
+                applyChats={this.applyChats}
+                socket={this.socket}
               />
               {
                 (this.selectedChatID != null) ? <ChatDetail

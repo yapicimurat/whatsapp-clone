@@ -87,9 +87,9 @@ app.get("/chat-list", (req, res) => {
 
 app.get("/create-chat", (req, res) => {
     const parameters = req.query;
-    if(!Helper.ParameterChecker(req.query, ["ownerID", "targetID"]))
+    if(!Helper.ParameterChecker(req.query, ["ownerID", "targetUsername"]))
     {
-        User.createChat(parameters.ownerID, parameters.targetID, res);
+        User.createChat(parameters.ownerID, parameters.targetUsername, res);
     }
     else
     {
@@ -142,7 +142,6 @@ io.on("connection", (socket) => {
     socket.on("SERVER-CONNECT_ALL_OF-ROOMS",(data) => {
         console.log(data);
         data.roomNames.forEach(roomName => {
-            console.log(roomName);
             socket.join(roomName);
         });
     });
@@ -153,6 +152,11 @@ io.on("connection", (socket) => {
        
 
         
+    });
+
+
+    socket.on("SERVER-NEW_CHAT", data => {
+        socket.broadcast.emit("CLIENT-NEW_CHAT",data)
     });
 
 });

@@ -140,28 +140,153 @@ module.exports = class User {
             })
     }
 
-    static async createChat(ownerID, targetID, res) {
+    static async createChat(ownerID, targetUsername, res) {
+
         let result = Helper.DefaultResponse;
-        const createdRoomName = ownerID + targetID;
+        let targetID = null;
         (async () => {
-            return await ModelChat({
-                roomName: createdRoomName,
-                ownerID: ownerID,
-                targetID: targetID
-            }).save()
-        })()
-            .then(data => {
-                result.message = "Chat is created";
-                result.value = {
-                    chatID: data._id,
-                    roomName: data.roomName
-                };
-                res.json(result);
-            }).catch(error => {
-                result.error = true;
-                result.message = error.message;
-                res.json(result);
+            return await ModelUser.find({
+                username: targetUsername
             });
+        })()
+        .then(user => {
+            if(user.length > 0)
+            {
+
+                /*
+                    [
+                {
+                    $match: {
+                        $or:
+                            [
+                                { ownerID: mongoose.Types.ObjectId(userID) },
+                                { targetID: mongoose.Types.ObjectId(userID) }
+                            ]
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "targetID",
+                        foreignField: "_id",
+                        as: "targetUser"
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "ownerID",
+                        foreignField: "_id",
+                        as: "ownerUser",
+                    }
+                }
+            ]
+                */
+                targetID = user[0]._id;
+                (async () => {
+                    return await ModelChat.find({
+                        $or: [
+                            { 
+                                $and:[
+                                    {ownerID: mongoose.Types.ObjectId(ownerID)},
+                                    {targetID: user[0]._id}
+                                ]
+                            },
+                            { 
+                                $and:[
+                                    {ownerID: user[0]._id},
+                                    {targetID: mongoose.Types.ObjectId(ownerID)}
+                                ]
+                            }
+                        ]
+                    })
+                })()
+                .then(chat => {
+                    if(chat.length > 0){
+                        return Promise.reject("You have already chat with this user.");
+                    }
+                    else{
+                        (async () => {
+                            const createdRoomName = ownerID + targetID;
+                            return await ModelChat({
+                                 roomName: createdRoomName,
+                                 ownerID: ownerID,
+                                 targetID: targetID
+                            }).save();
+                        })()
+                        .then(data => {
+                            (async () => {
+                                return await ModelChat.aggregate(
+                                    [
+                                        {
+                                            $match: {
+                                                ownerID: data.ownerID
+                                            }
+                                        },
+                                        {
+                                            $lookup: {
+                                                from: "users",
+                                                localField: "targetID",
+                                                foreignField: "_id",
+                                                as: "targetUser"
+                                            }
+                                        },
+                                        {
+                                            $lookup: {
+                                                from: "users",
+                                                localField: "ownerID",
+                                                foreignField: "_id",
+                                                as: "ownerUser",
+                                            }
+                                        },
+                                        {
+                                            $lookup: {
+                                                from: "messages",
+                                                localField: "_id",
+                                                foreignField: "chatID",
+                                                as: "messages",
+                                            }
+                                        }
+                                ])
+                            })()
+                            .then(data => {
+                                result.error = false;
+                                result.message = "New chat created.";
+                                result.value = {
+                                    chats: data
+                                }
+                                res.json(result);
+                            })
+                            .catch(error => {
+                                result.error = true;
+                                result.message = error;
+                                res.json(result);
+                            });
+
+                        })
+                        .catch(error => {
+                            result.error = true;
+                            result.message = error;
+                            res.json(result);
+                        });
+                    }
+                })
+                .catch(error => {
+                    result.error = true;
+                    result.message = error;
+                    res.json(result);
+                })
+            }else{
+                return Promise.reject("User not found.")
+            }
+        })
+        .catch(error => {
+            result.error = true;
+            result.message = error;
+            res.json(result);
+        });
+
+        console.log(result);
     }
 
     static async getChatList(userID, res) {
@@ -221,16 +346,16 @@ module.exports = class User {
                 message: message
             }).save()
         })()
-            .then(data => {
-                result.message = "Message has been saved.";
-                result.value = data;
-                res.json(result);
-            })
-            .catch(error => {
-                result.error = true;
-                result.message = error;
-                res.json(result);
-            });
+        .then(data => {
+            result.message = "Message has been saved.";
+            result.value = data;
+            res.json(result);
+        })
+        .catch(error => {
+            result.error = true;
+            result.message = error;
+            res.json(result);
+        });
     }
 
 }

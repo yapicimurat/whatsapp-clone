@@ -10,40 +10,32 @@ class ChatList extends React.Component
     
     this.userID = props.userID;
     this.username = props.username;
-    this.state = {
-      isFounded: false
-    };
+    this.filterText = null;
 
+    this.setFilterText = this.setFilterText.bind(this);
 
-
-    this.filterChatList = this.filterChatList.bind(this);
+    this.filterMode = false;
   }
 
-  getChatList(){
-    let isFounded = true;
-    if(this.props.chats.length == 0){
-      isFounded = false
-    }
-    this.setState({
-      isFounded: isFounded
-    })
-  }
+ 
 
-  componentDidMount()
-  {
-    this.getChatList();
-  }
-
-
-  filterChatList(){
-
+  
+  setFilterText(value){
+    this.filterMode = true;
+    
+    if(value == "")
+      this.filterMode = false;
+    this.filterText = value;
+    this.setState({});
   }
 
   render(){
-    const isLoading = this.state.isLoading;
-    const isFounded = this.state.isFounded;
-    const chats = this.props.chats;
-    if(!isLoading && isFounded)
+    const chats = (this.filterMode == false) ? this.props.chats : this.props.chats.filter(chat => {
+      const isOwner = (chat.ownerID == this.userID) ? true : false;
+      const chatUsername = (!isOwner) ? chat.ownerUser[0].username : chat.targetUser[0].username;
+      return chatUsername.includes(this.filterText);
+    });
+    if(Array.isArray(chats) && chats.length > 0)
     {
       return(
         <div className="chat-list-area">
@@ -54,7 +46,9 @@ class ChatList extends React.Component
             <ChatListFilter
               userID={this.props.userID}
               username={this.props.username}
-              filterChatList={this.filterChatList}
+              setFilterText={this.setFilterText}
+              applyChats={this.props.applyChats}
+              socket={this.props.socket}
             />
             <div className="chat-list">
               {
@@ -82,7 +76,7 @@ class ChatList extends React.Component
         </div>
       );
     }
-    else if(!isFounded)
+    else
     {
       return(
         <div className="chat-list-area">
@@ -91,7 +85,13 @@ class ChatList extends React.Component
               username={this.props.username}
               getSelectedChatInformations={this.props.getSelectedChatInformations}
              />
-            <ChatListFilter/>
+            <ChatListFilter
+              userID={this.props.userID}
+              username={this.props.username}
+              setFilterText={this.setFilterText}
+              applyChats={this.props.applyChats}
+              socket={this.props.socket}
+            />
             <div className="chat-list">
               <div className="no-chat">You don't have any chat with someone.</div>
             </div>
