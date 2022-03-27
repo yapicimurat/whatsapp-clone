@@ -30,31 +30,37 @@ class ChatListFilter extends React.Component {
   }
 
   createNewChat(){
-    if(this.state.filter != ""){
+    const filterText = this.state.filter;
+    if(filterText != ""){
       //create-chat targeID yerine targetUsernam istemeli!!!
       //gelen istek sonucunda roomName'a join ol!!!
-      axios.get(`http://localhost:3005/create-chat?ownerID=${this.props.userID}&targetUsername=${this.state.filter}`)
-      .then(response => {
-        const {error, message, value} = response.data;
-        if(error == false )
-        {
-          //server'a bilgi gonder ve karsi tarafa'da bilgiler gitsin
-          const chat = value.chats.filter((chat) => {
-            return (chat.targetUser[0].username == this.state.filter)
-          });
-          this.props.socket.emit("SERVER-CONNECT_ALL_OF-ROOMS", {
-            roomNames: [chat[0].roomName]
-          });
-          this.props.socket.emit("SERVER-NEW_CHAT",{chat: chat});
-          this.props.applyChats(value.chats);
-        }
-        else{
-          alert(message);
-        }
-      })
-      .catch(error => {
-        alert(error.message);
-      });
+      if(filterText == this.props.username){
+        alert("You can not chat with yourself.");
+      }else{
+        axios.get(`http://localhost:3005/create-chat?ownerID=${this.props.userID}&targetUsername=${this.state.filter}`)
+        .then(response => {
+          const {error, message, value} = response.data;
+          if(error == false )
+          {
+            //server'a bilgi gonder ve karsi tarafa'da bilgiler gitsin
+            const chat = value.chats.filter((chat) => {
+              return (chat.targetUser[0].username == this.state.filter)
+            });
+            this.props.socket.emit("SERVER-CONNECT_ALL_OF-ROOMS", {
+              roomNames: [chat[0].roomName]
+            });
+            this.props.socket.emit("SERVER-NEW_CHAT",{chat: chat});
+            this.props.applyChats(value.chats);
+          }
+          else{
+            alert(message);
+          }
+        })
+        .catch(error => {
+          alert(error.message);
+        });
+      }
+      
     }else{
       alert("Please enter username of your friend.");
     }
