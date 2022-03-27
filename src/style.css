@@ -124,9 +124,10 @@ button.add-user:hover{
 }
 .chat-list-information-active{
     background-color: #eff2f5;
+    cursor: pointer;
 }
 
-.chat-list-information:hover{
+.chat-list-information:not(.chat-list-information-active):hover{
     cursor: pointer;
     background-color: #f5f6f6;
 
