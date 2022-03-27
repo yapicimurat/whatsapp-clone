@@ -19,7 +19,8 @@ class ChatList extends React.Component
 
  
 
-  
+  //bu kısımda(chatList) filtrelemenin eyleme donusebilmesi icin bu fonksiyonu olusturdum.
+  //bu fonksiyon child parent(chatListFilter) tarafindan kullanilip chatlist re-list islemi gerceklestiriliyor
   setFilterText(value){
     this.filterMode = true;
     
@@ -65,6 +66,7 @@ class ChatList extends React.Component
                       ownerID={chat.ownerID}
                       targetID={chat.targetID}
                       chatUsername={chatUsername}
+                      getSelectedChatInformations={this.props.getSelectedChatInformations}
                       applySelectedChatInformations={this.props.applySelectedChatInformations}
                       lastMessage={(chat.messages.length > 0) ? chat.messages[chat.messages.length - 1].message : null}
                       lastMessageDatetime={(chat.messages.length > 0) ? chat.messages[chat.messages.length - 1].datetime : null}

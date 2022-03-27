@@ -36,6 +36,10 @@ class ChatListFilter extends React.Component {
       //gelen istek sonucunda roomName'a join ol!!!
       if(filterText == this.props.username){
         alert("You can not chat with yourself.");
+        this.setState({
+          filter: ""
+        });
+        this.props.setFilterText("");
       }else{
         axios.get(`http://localhost:3005/create-chat?ownerID=${this.props.userID}&targetUsername=${this.state.filter}`)
         .then(response => {
