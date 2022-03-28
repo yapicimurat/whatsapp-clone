@@ -42,6 +42,7 @@ class Register extends React.Component
         new RegisterService().register(username, password)
         .then(data => {
           alert(data);
+          this.props.setOperation("login");
         })
         .catch(err => {
           alert(err);

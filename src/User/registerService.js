@@ -7,7 +7,6 @@ export default class RegisterService{
             return RegisterService.instance;
         }
 
-
         RegisterService.instance = this;
         Object.freeze(this);
         return RegisterService.instance;
