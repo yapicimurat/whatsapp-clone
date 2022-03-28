@@ -1,5 +1,5 @@
 import React from "react";
-import UserInformation from "./UserInformation";
+import UserInformation from "../User/UserInformation";
 import ChatArea from "./ChatArea";
 import ChatDetailBottom from "./ChatDetailBottom";
 class ChatDetail extends React.Component {

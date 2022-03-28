@@ -1,5 +1,5 @@
 import React from "react";
-import UserInformation from "./UserInformation";
+import UserInformation from "../User/UserInformation";
 import ChatListFilter from "./ChatListFilter";
 import ChatListInformation from "./ChatListInformation";
 class ChatList extends React.Component

@@ -1,5 +1,5 @@
 import React from "react";
-import UserDefaultImage from "./user-image.png";
+import UserDefaultImage from "../../assets/images/user-image.png";
 class ChatListInformation extends React.Component
 {
   constructor(props)

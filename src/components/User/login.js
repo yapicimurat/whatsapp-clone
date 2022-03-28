@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
-import LoginService from "./User/loginService";
+import LoginService from "../../User/loginService";
 class Login extends React.Component {
   constructor(props) {
     super(props);

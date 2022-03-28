@@ -215,7 +215,7 @@ button.add-user:hover{
     display: flex;
     flex-direction: column;
     background-color: #f1ece4;
-    background-image: url("./bg-chat.png");
+    background-image: url("../images/bg-chat.png");
     background-repeat: repeat;
     background-size: 250px;
     overflow: auto;

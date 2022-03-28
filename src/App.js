@@ -1,12 +1,12 @@
 import React from "react";
-import "./style.css";
+import "./assets/css/style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
-import loadingIcon from "./loading.gif";
+import loadingIcon from "./assets/images/loading.gif";
 import { io } from "socket.io-client";
-import ChatList from "./ChatList";
-import ChatDetail from "./ChatDetail";
-import Welcome from "./welcome";
+import ChatList from "./components/ChatList/ChatList";
+import ChatDetail from "./components/ChatDetail/ChatDetail";
+import Welcome from "./components/User/welcome";
 class App extends React.Component {
   constructor(props) {
     super(props);

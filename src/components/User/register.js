@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
-import RegisterService from "./User/registerService";
+import RegisterService from "../../User/registerService";
 
 class Register extends React.Component
 {
