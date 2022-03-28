@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
+import RegisterService from "./User/registerService";
 
 class Register extends React.Component
 {
@@ -39,19 +39,12 @@ class Register extends React.Component
     else
     {
         //tum durumlar kontrol edildi kullanici icin kayit islemi baslatilabilir
-        axios.get(`http://localhost:3005/register?username=${username}&password=${password}`)
-        .then(res => {
-            const {data} = res;
-            if(!data.error){
-              alert(data.message);
-            }
-            else
-            {
-              alert(data.message);
-            }
+        new RegisterService().register(username, password)
+        .then(data => {
+          alert(data);
         })
-        .catch(error => {
-            alert(error);
+        .catch(err => {
+          alert(err);
         });
     }
 

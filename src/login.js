@@ -27,8 +27,8 @@ class Login extends React.Component {
         this.props.applyUserInformations(data);
         this.props.connectSocket();
       })
-      .catch(() => {
-
+      .catch(err => {
+        alert(err);
       });
     }
   }

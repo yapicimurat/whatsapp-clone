@@ -3,14 +3,13 @@ export default class LoginService{
 
 
     constructor(username, password){
-
         if(LoginService.instance instanceof LoginService){
             return LoginService.instance;
         }
         this.username = username;
         this.password = password;
 
-        //Object.freeze(this);
+        Object.freeze(this);
         LoginService.instance = this;
         return LoginService.instance;
     }
@@ -21,7 +20,6 @@ export default class LoginService{
         .then(res => {
             const { data } = res;
             if (!data.error) {
-              alert(data.message.login);
               /*
                 response uzerinden alinmasi gereken bilgileri
                 userID                => data.value.login[0]._id
@@ -43,13 +41,12 @@ export default class LoginService{
               return Promise.resolve(transferData);
             }
             else {
-              alert(data.message.login);
+                return Promise.reject(data.message.login);
             }
     
         })
         .catch(error => {
-            alert(error);
-            return Promise.reject();
+            return Promise.reject(error);
         });
     }
 
