@@ -14,11 +14,8 @@ class Register extends React.Component
         password: "",
         passwordVerify: ""
     };
-
-
     this.handleSubmit = this.handleSubmit.bind(this);
     this.changeValue = this.changeValue.bind(this);
-    
   }
 
 
