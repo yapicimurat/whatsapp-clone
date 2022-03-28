@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
+import LoginService from "./User/loginService";
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -22,39 +22,14 @@ class Login extends React.Component {
       alert("Please enter all of informations.");
     }
     else {
-      axios.get(`http://localhost:3005/login?username=${username}&password=${password}`)
-        .then(res => {
-          const { data } = res;
-          if (!data.error) {
-            alert(data.message.login);
-            /*
-              response uzerinden alinmasi gereken bilgileri
-              userID                => data.value.login[0]._id
-              username              => data.value.login[0].username
-              chats                 => data.value.chats (array)
-                  chatID            => data.value.chats[i]._id;
-                  roomName          => data.value.chats[i].roomName;
-                  ownerID           => data.value.chats[i].ownerUser[0]._id
-                  ownerUsername     => data.value.chats[i].ownerUser[0].username
-                  targetID          => data.value.chats[i].targetUser[0]._id
-                  targetUsername    => data.value.chats[i].targetUser[0].username
-                  messages          => data.value.chats[i].messages
-            */
-            let transferData = {
-              userID: data.value.login[0]._id,
-              username: data.value.login[0].username,
-              chats: data.value.chats
-            };
-            this.props.applyUserInformations(transferData);
-            this.props.connectSocket();
-          }
-          else {
-            alert(data.message.login);
-          }
+      new LoginService(username, password).login()
+      .then(data => {
+        this.props.applyUserInformations(data);
+        this.props.connectSocket();
+      })
+      .catch(() => {
 
-        }).catch(error => {
-          alert(error);
-        });
+      });
     }
   }
 
