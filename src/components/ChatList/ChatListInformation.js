@@ -27,7 +27,7 @@ class ChatListInformation extends React.Component
 
 
   render(){
-    const classNameLastMessage = (this.lastMessage == "" || this.lastMessage == undefined) ? "chat-detail-last-message no-dialog" : "chat-detail-last-message";
+    const classNameLastMessage = (this.props.lastMessage == "" || this.props.lastMessage == undefined) ? "chat-detail-last-message no-dialog" : "chat-detail-last-message";
     const classNameChatListInformation = (this.props.chatID == this.props.getSelectedChatInformations().chatID) ? "chat-list-information chat-list-information-active" : "chat-list-information";
     const lastMessage = (this.props.lastMessage == "" || this.props.lastMessage == undefined) ? `You don't have any dialog with ${this.chatUsername} before.` : this.props.lastMessage;
     this.lastMessageDatetime = (this.lastMessageDatetime == "" || this.lastMessageDatetime == undefined) ? "" : this.lastMessageDatetime;
