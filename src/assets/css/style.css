@@ -91,14 +91,15 @@ button.add-user:hover{
 }
 
 .chat-list-filter input[type="text"]{
-    min-width: 400px;
+    min-width: calc(100% - 60px);
     height: 35px;
     border-radius: 7px;
-    border: 0px;
+    border: 1px solid #999;
     outline: none;
     padding-left: 65px;
     background-color: #eff2f5;
     color: #000;
+    
 }
 
 .chat-list-filter{
@@ -166,7 +167,7 @@ button.add-user:hover{
     align-items: flex-start;
 
     height: 50px;
-    width: 350px;
+    width: calc(100% - 125px);
     margin-left: 20px;
 }
 .chat-detail-user{
