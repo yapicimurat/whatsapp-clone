@@ -39,28 +39,31 @@ class ChatDetailBottom extends React.Component
     this.setState({
       message: e.target.value
     });
-
+    const {message} = this.state;
     //enter
     if(e.keyCode == 13){
       if(this.props.socket != null && this.props.socket != undefined && this.props.socket.connected == true){
-        axios.get(`http://localhost:3005/send-message?chatID=${this.chatID}&ownerID=${this.props.userID}&targetID=${this.targetUserID}&message=${this.state.message}&roomName=${this.roomName}`)
-        .then(response => {
-          response = response.data;
-          //const {error, value :{chatID, ownerID, targetID, roomName, datetime, message}} = response;
-          this.props.socket.emit("SERVER-MESSAGE_TO_ROOM",{
-            messageID: response.value._id,
-            roomName: response.value.roomName,
-            message: response.value.message,
-            ownerID: response.value.ownerID,
-            chatID: response.value.chatID,
-            targetID: response.value.targetID,
-            datetime: response.value.datetime
-            }
-          );
-        })
-        .catch(error => {
-          alert(error.message);
-        });
+        if(message != "" && message != null && message != undefined){
+          axios.get(`http://localhost:3005/send-message?chatID=${this.chatID}&ownerID=${this.props.userID}&targetID=${this.targetUserID}&message=${this.state.message}&roomName=${this.roomName}`)
+          .then(response => {
+            response = response.data;
+            //const {error, value :{chatID, ownerID, targetID, roomName, datetime, message}} = response;
+            this.props.socket.emit("SERVER-MESSAGE_TO_ROOM",{
+              messageID: response.value._id,
+              roomName: response.value.roomName,
+              message: response.value.message,
+              ownerID: response.value.ownerID,
+              chatID: response.value.chatID,
+              targetID: response.value.targetID,
+              datetime: response.value.datetime
+              }
+            );
+          })
+          .catch(error => {
+            alert(error.message);
+          });
+        }
+        
         
         
       }
