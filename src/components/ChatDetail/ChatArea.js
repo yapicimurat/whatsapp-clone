@@ -31,7 +31,7 @@ class ChatArea extends React.Component
 
       return(
         <div className="chat-area">
-          
+          You don't have any messages...
         </div>
       );
       
@@ -56,6 +56,7 @@ class ChatArea extends React.Component
               */
               const isOwner = (message.ownerID == this.userID) ? true : false;
               if(isOwner){
+                console.log(message._id);
                 return <Chat
                   key={message._id}
                   type="me"

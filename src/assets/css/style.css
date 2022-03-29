@@ -82,9 +82,12 @@ button.add-user{
     width: 50px;
     height: 35px;
     font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #000;
 }
 button.add-user:hover{
    cursor: pointer;
+   border: 2px solid #000;
 }
 
 .chat-list-filter input[type="text"]{

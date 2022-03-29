@@ -41,28 +41,30 @@ class ChatListFilter extends React.Component {
         });
         this.props.setFilterText("");
       }else{
-        axios.get(`http://localhost:3005/create-chat?ownerID=${this.props.userID}&targetUsername=${this.state.filter}`)
-        .then(response => {
-          const {error, message, value} = response.data;
-          if(error == false )
-          {
-            //server'a bilgi gonder ve karsi tarafa'da bilgiler gitsin
-            const chat = value.chats.filter((chat) => {
-              return (chat.targetUser[0].username == this.state.filter)
-            });
-            this.props.socket.emit("SERVER-CONNECT_ALL_OF-ROOMS", {
-              roomNames: [chat[0].roomName]
-            });
-            this.props.socket.emit("SERVER-NEW_CHAT",{chat: chat});
-            this.props.applyChats(value.chats);
-          }
-          else{
-            alert(message);
-          }
-        })
-        .catch(error => {
-          alert(error.message);
-        });
+        if(window.confirm("Are you sure you want to chat with this user?")){
+          axios.get(`http://localhost:3005/create-chat?ownerID=${this.props.userID}&targetUsername=${this.state.filter}`)
+          .then(response => {
+            const {error, message, value} = response.data;
+            if(error == false )
+            {
+              //server'a bilgi gonder ve karsi tarafa'da bilgiler gitsin
+              const chat = value.chats.filter((chat) => {
+                return (chat.targetUser[0].username == this.state.filter)
+              });
+              this.props.socket.emit("SERVER-CONNECT_ALL_OF-ROOMS", {
+                roomNames: [chat[0].roomName]
+              });
+              this.props.socket.emit("SERVER-NEW_CHAT",{chat: chat});
+              this.props.applyChats(value.chats);
+            }
+            else{
+              alert(message);
+            }
+          })
+          .catch(error => {
+            alert(error.message);
+          });
+        }
       }
       
     }else{
