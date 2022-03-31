@@ -1,5 +1,7 @@
 import React from "react";
 import UserDefaultImage from "../../assets/images/user-image.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as icons from "@fortawesome/free-solid-svg-icons";
 class ChatListInformation extends React.Component
 {
   constructor(props)
@@ -39,30 +41,34 @@ class ChatListInformation extends React.Component
       minute: "2-digit"
     });
     
-    return(
-
-      <div className={classNameChatListInformation}
-        onClick={this.clickChat}
-        >
-        <div className="user-image">
-          <img src={UserDefaultImage}/>
+    if(this.isRequestForChat == false){
+      return(
+        <div className={classNameChatListInformation}
+          onClick={this.clickChat}>
+          <div className="user-image">
+            <img src={UserDefaultImage}/>
+          </div>
+          <div className="chat-detail-title">
+            <div className="chat-detail-user">{this.chatUsername}</div>
+            <div className={classNameLastMessage}>{lastMessage}</div> 
+          </div> 
+          <div className="chat-detail-time">{date}</div>
         </div>
-        { 
-          this.isRequestForChat == false ? 
-            <div className="chat-detail-title">
-              <div className="chat-detail-user">{this.chatUsername}</div>
-              <div className={classNameLastMessage}>{lastMessage}</div> 
-            </div> : 
-            <div className="chat-detail-title">
-               {/* BURAYA YENİ CHAT İSTEĞİ GELDİĞİNDE KABUL ET KABUL ETME ONAY KUTUCUGU GELECEK....*/}
+      );
+    }else{
+      return (
+        <div className="user-chat-request-main">
+          <div className="user-chat-request-left">
+            <b>muratyapici</b> sent you a messaging request. Do you want to accept?
+          </div>
+          <div className="user-chat-request-right">
+              <button className="accept-button">Accept <br/><FontAwesomeIcon style={{fontSize: "18px"}} icon={icons.faCheckCircle}/></button>
+              <button className="decline-button">Decline <br/><FontAwesomeIcon style={{fontSize: "18px"}} icon={icons.faTimesCircle}/></button>
             </div>
-        }
-          
-          
-        
-        <div className="chat-detail-time">{date}</div>
-      </div>
-    );
+        </div>
+      );
+    }
+    
   }
 
 

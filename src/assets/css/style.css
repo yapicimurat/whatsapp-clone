@@ -170,6 +170,52 @@ button.add-user:hover{
     width: calc(100% - 125px);
     margin-left: 20px;
 }
+
+.user-chat-request-main{
+    width: 100%;
+    height: 50px;
+    background-color: #eff2f5;
+    border-bottom: 1px solid #d1d7db;
+
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+    
+}
+
+.user-chat-request-left{
+    width: 70%;
+    height: 100%;
+    padding: 5px;
+    font-size: 14px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.user-chat-request-right{
+    width: 30%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.accept-button,.decline-button{
+    width: 50%;
+    height: 100%;
+    color: #155724;
+    background-color: #d4edda;
+    cursor: pointer;
+    text-transform: uppercase;
+    border: none;
+
+}
+
+.decline-button{
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+
 .chat-detail-user{
     font-family: 'Kanit', sans-serif;
     font-size: 18px;
