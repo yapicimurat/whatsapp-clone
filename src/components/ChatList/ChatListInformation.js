@@ -18,6 +18,9 @@ class ChatListInformation extends React.Component
     this.lastMessageDatetime = props.lastMessageDatetime;
 
     this.clickChat = this.clickChat.bind(this);
+
+
+    this.isRequestForChat = true;
   }
 
   clickChat()  
@@ -44,11 +47,19 @@ class ChatListInformation extends React.Component
         <div className="user-image">
           <img src={UserDefaultImage}/>
         </div>
+        { 
+          this.isRequestForChat == false ? 
+            <div className="chat-detail-title">
+              <div className="chat-detail-user">{this.chatUsername}</div>
+              <div className={classNameLastMessage}>{lastMessage}</div> 
+            </div> : 
+            <div className="chat-detail-title">
+               {/* BURAYA YENİ CHAT İSTEĞİ GELDİĞİNDE KABUL ET KABUL ETME ONAY KUTUCUGU GELECEK....*/}
+            </div>
+        }
+          
+          
         
-        <div className="chat-detail-title">
-          <div className="chat-detail-user">{this.chatUsername}</div>
-          <div className={classNameLastMessage}>{lastMessage}</div>
-        </div>
         <div className="chat-detail-time">{date}</div>
       </div>
     );
