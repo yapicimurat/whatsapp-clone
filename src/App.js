@@ -92,15 +92,18 @@ class App extends React.Component {
         });
       });
       this.socket.on("CLIENT-NEW_CHAT",data => {
-        this.socket.emit("SERVER-CONNECT_ALL_OF-ROOMS", {
-          roomNames: [data.chat[0].roomName]
-        });
-        if(this.chats.length == 0){
-         this.chats = data.chat;
-        }else{
+        console.log(data);
+        //asagidaki kod socket'e bu client icin yeni odaya baglanmasini ve chat listesini yenilemesini sagliyor
+        // this.socket.emit("SERVER-CONNECT_ALL_OF-ROOMS", {
+        //   roomNames: [data.chat[0].roomName]
+        // });
+        
+        if(this.chats != null){
+          data.chat[0].isRequestForChat = true;
           this.chats.push(data.chat[0]);
+          this.setState({});
         }
-        this.setState({});
+        
       });
 
 

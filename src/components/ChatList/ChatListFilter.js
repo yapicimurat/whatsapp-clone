@@ -15,6 +15,7 @@ class ChatListFilter extends React.Component {
     this.changeEvent = this.changeEvent.bind(this);
     this.submitForm = this.submitForm.bind(this);
     this.createNewChat = this.createNewChat.bind(this);
+
   }
 
   changeEvent(event) {
@@ -28,6 +29,8 @@ class ChatListFilter extends React.Component {
   submitForm(e){
     e.preventDefault();
   }
+
+
 
   createNewChat(){
     const filterText = this.state.filter;

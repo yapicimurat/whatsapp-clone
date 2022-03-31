@@ -57,6 +57,7 @@ class ChatList extends React.Component
                   const isOwner = (chat.ownerID == this.userID) ? true : false;
                   const chatUsername = (!isOwner) ? chat.ownerUser[0].username : chat.targetUser[0].username;
                   return <ChatListInformation
+                      isRequestForChat={(chat.isRequestForChat != undefined) ? true : false}
                       key={chat._id}
                       userID={this.userID}
                       username={this.username}

@@ -21,8 +21,19 @@ class ChatListInformation extends React.Component
 
     this.clickChat = this.clickChat.bind(this);
 
+    this.isRequestForChat = (this.props.isRequestForChat != undefined) ? this.props.isRequestForChat : false;
+    this.acceptRequest = this.acceptRequest.bind(this);
+    this.declineRequest = this.declineRequest.bind(this);
+  }
 
-    this.isRequestForChat = true;
+
+  acceptRequest(){
+    //accept request
+  }
+
+  declineRequest(){
+    //decline request
+    
   }
 
   clickChat()  
@@ -59,11 +70,17 @@ class ChatListInformation extends React.Component
       return (
         <div className="user-chat-request-main">
           <div className="user-chat-request-left">
-            <b>muratyapici</b> sent you a messaging request. Do you want to accept?
+            <b style={{fontSize: "16px", color: "#ff0000"}}>{this.chatUsername}</b> sent you a messaging request. Do you want to accept?
           </div>
           <div className="user-chat-request-right">
-              <button className="accept-button">Accept <br/><FontAwesomeIcon style={{fontSize: "18px"}} icon={icons.faCheckCircle}/></button>
-              <button className="decline-button">Decline <br/><FontAwesomeIcon style={{fontSize: "18px"}} icon={icons.faTimesCircle}/></button>
+              <button
+              className="accept-button"
+              onClick={this.acceptRequest}
+              >Accept <br/><FontAwesomeIcon style={{fontSize: "18px"}} icon={icons.faCheckCircle}/></button>
+              <button
+              className="decline-button"
+              onClick={this.declineRequest}
+              >Decline <br/><FontAwesomeIcon style={{fontSize: "18px"}} icon={icons.faTimesCircle}/></button>
             </div>
         </div>
       );
