@@ -1,48 +1,72 @@
 import React from "react";
-import Login from "./login";
-import Register from "./register";
+import Login from "./Login";
+import Register from "./Register";
+import NotFound from "./NotFound";
+import Main from "../Main/Main";
+export default function Welcome({operation}) {
+    switch (operation) {
+        case "welcome":
+            return (
+                <small className="welcome-message">WhatsApp-Clone Project</small>
+            );
+            break;
+        case "login":
+            return (
+                <div className="welcome">
+                    <div className="welcome-title">
+                        <h4>Welcome to the Whatsapp-clone Project</h4>
+                    </div>
+                    <Login/>
+                </div>
+            );
+            break;
 
+        case "register":
+            return (
+                <div className="welcome">
+                    <div className="welcome-title">
+                        <h4>Welcome to the Whatsapp-clone Project</h4>
+                    </div>
+                    <Register />
+                </div>
+            );
+            break;
 
-export default class Welcome extends React.Component
-{
-    constructor(props)
-    {
-        super(props);
-        this.operation = props.operation;
+            case "chat":
+                return <Main/>;
+            break;
 
-        this.state = {
-            operation: this.operation
-        };
-
-        this.setOperation = this.setOperation.bind(this);
+        default:
+            return (
+                <NotFound/>
+            );
+            break;
     }
+}
 
-    setOperation(operationName)
-    {
-        this.setState({
-            operation: operationName
-        });
-    }
-
-    render()
-    {
-        let operation = this.state.operation;
-        switch(operation)
-        {
+/*
+render() {
+        const operation = this.props.operation;
+        switch (operation) {
+            case "welcome":
+                return (
+                    <small className="welcome-message">WhatsApp-Clone Project</small>
+                );
+                break;
             case "login":
                 return (
                     <div className="welcome">
                         <div className="welcome-title">
                             <h4>Welcome to the Whatsapp-clone Project</h4>
                         </div>
-                        <Login 
-                            applyUserInformations={this.props.applyUserInformations} 
+                        <Login
+                            applyUserInformations={this.props.applyUserInformations}
                             connectSocket={this.props.connectSocket}
-                            appGoToPage={this.props.appGoToPage} 
-                            setOperation={this.setOperation}/>
+                            appGoToPage={this.props.appGoToPage}
+                            setOperation={this.setOperation} />
                     </div>
                 );
-            break;
+                break;
 
             case "register":
                 return (
@@ -52,21 +76,16 @@ export default class Welcome extends React.Component
                         </div>
                         <Register
                             applyUserInformations={this.props.applyUserInformations}
-                            appGoToPage={this.props.appGoToPage} 
-                            setOperation={this.setOperation}/>
+                            appGoToPage={this.props.appGoToPage}
+                            setOperation={this.setOperation} />
                     </div>
                 );
-            break;
+                break;
 
             default:
-                this.setOperation("login");
-            break;
+                <h1>Ooopssss..... 404 Not Found</h1>
+                break;
         }
-
-
-        
     }
 
-
-
-}
+*/

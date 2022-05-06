@@ -5,7 +5,9 @@
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.0.0",
     "@fortawesome/react-fontawesome": "^0.1.17",
+    "@reduxjs/toolkit": "^1.8.1",
     "axios": "^0.25.0",
+    "clsx": "^1.1.1",
     "cors": "^2.8.5",
     "express": "^4.17.2",
     "font-awesome": "^4.7.0",
@@ -13,6 +15,8 @@
     "mongoose": "^6.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-redux": "^8.0.0",
+    "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",
     "socket.io": "^4.4.1",

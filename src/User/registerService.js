@@ -1,4 +1,5 @@
 import axios from "axios";
+import { API_TYPES } from "../app/api/api";
 export default class RegisterService{
 
 
@@ -14,7 +15,7 @@ export default class RegisterService{
 
 
     register(username, password){
-        return axios.get(`http://localhost:3005/register?username=${username}&password=${password}`)
+        return axios.get(API_TYPES.REGISTER(username, password))
         .then(res => {
             const {data} = res;
             if(!data.error){

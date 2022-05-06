@@ -1,78 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
 import RegisterService from "../../User/registerService";
 
-class Register extends React.Component
-{
-  constructor(props)
-  {
-    super(props);
-
-    this.state = {
-        username: "",
-        password: "",
-        passwordVerify: ""
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.changeValue = this.changeValue.bind(this);
-  }
 
 
-  handleSubmit(e)
-  {
+export default function Register() {
+  //state hook
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordVerify, setPasswordVerify] = useState("");
+  
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const {username, password, passwordVerify} = this.state;
-
-    if(username == "" || password == "" || passwordVerify == "")
-    {
-        alert("Please enter all of informations.");
+    if (username == "" || password == "" || passwordVerify == "") {
+      alert("Please enter all required informations.");
     }
-    else if(password != passwordVerify)
-    {
-        alert("Passwords do not match.");
+    else if (password != passwordVerify) {
+      alert("Passwords do not match.");
     }
-    else
-    {
-        //tum durumlar kontrol edildi kullanici icin kayit islemi baslatilabilir
-        new RegisterService().register(username, password)
+    else {
+      //tum durumlar kontrol edildi kullanici icin kayit islemi baslatilabilir
+      new RegisterService().register(username, password)
         .then(data => {
           alert(data);
-          this.props.setOperation("login");
+          window.location.href = "/login";
         })
         .catch(err => {
           alert(err);
         });
     }
+  };
+
+  const changeValue = (e) => {
+    if (e.target.name === "username") {
+      setUsername(e.target.value);
+    } else if (e.target.name === "password") {
+      setPassword(e.target.value);
+    } else if (e.target.name === "passwordVerify") {
+      setPasswordVerify(e.target.value);
+    }
+  };
 
 
-  }
-
-  changeValue(e)
-  { 
-    this.setState({
-        [e.target.name]: e.target.value
-    });
-  }
-
-  render(){
-    return (
-        <div className="login-register">
-        <form onSubmit={this.handleSubmit}>
-            <label>Username</label>
-            <input type="text" name="username" value={this.state.username} onChange={this.changeValue}/>
-            <label>Password</label>
-            <input type="password" name="password" value={this.state.password} onChange={this.changeValue}/>
-            <label>Password verify</label>
-            <input type="password" name="passwordVerify" value={this.state.passwordVerify} onChange={this.changeValue}/>
-            <button className="login-button"><FontAwesomeIcon icon={icons.faUserPlus}/> register</button>
-            <small>Are you registered? <a href="#" onClick={() => this.props.setOperation("login")}>Login now</a></small>
-        </form>
+  return (
+    <div className="login-register">
+      <form onSubmit={handleSubmit}>
+        <label>Username</label>
+        <input type="text" name="username" value={username} onChange={changeValue} />
+        <label>Password</label>
+        <input type="password" name="password" value={password} onChange={changeValue} />
+        <label>Password verify</label>
+        <input type="password" name="passwordVerify" value={passwordVerify} onChange={changeValue} />
+        <button className="login-button"><FontAwesomeIcon icon={icons.faUserPlus} /> register</button>
+        <small>Are you registered? <a href="/login">Login now</a></small>
+      </form>
     </div>
-    );
-  }
-
-
+  );
 }
-export default Register;
