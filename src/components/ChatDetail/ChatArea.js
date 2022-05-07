@@ -1,50 +1,27 @@
 import React from "react";
 import Chat from "./Chat";
-class ChatArea extends React.Component
-{
-  constructor(props)
-  {
-    super(props);
-
-    this.userID = props.userID;
-    this.username = props.username;
-    this.chats = null;
-    this.messages = null;
-    this.messageInputRef = React.createRef();
-
-  }
 
 
-  componentDidUpdate()
-  {
-    this.messageInputRef.current.scrollTo(0, this.messageInputRef.current.scrollHeight);
-  }
 
-  render()
-  {
-    const {chatIndex} = this.props.getSelectedChatInformations();
-    this.chats = this.props.chats;
-    this.messages = this.chats[chatIndex].messages;
-
-    if(this.messages == null)
+export default function ChatArea({userID, username, messages}){
+  //const messageInputRef = React.createRef();
+    if(messages.length === 0)
     {
-
       return(
         <div className="chat-area">
           You don't have any messages...
         </div>
       );
-      
     }
     else
     {
       return(
         <div 
           className="chat-area"
-          ref={this.messageInputRef}
+          //ref={this.messageInputRef}
           >
           {
-            this.messages.map(message => {
+            messages.map(message => {
               /*
               _id
               chatID
@@ -54,15 +31,14 @@ class ChatArea extends React.Component
               message
               datetime
               */
-              const isOwner = (message.ownerID == this.userID) ? true : false;
+              const isOwner = (message.ownerID == userID) ? true : false;
               if(isOwner){
-                console.log(message._id);
                 return <Chat
                   key={message._id}
                   type="me"
                   isOwner={isOwner}
-                  userID={this.userID}
-                  username={this.username}
+                  userID={userID}
+                  username={username}
                   singleMessage={message}
                  />
               }else{
@@ -70,8 +46,8 @@ class ChatArea extends React.Component
                   key={message._id}
                   type="other"
                   isOwner={isOwner}
-                  userID={this.userID}
-                  username={this.username}
+                  userID={userID}
+                  username={username}
                   singleMessage={message}
                  />
               }
@@ -81,8 +57,38 @@ class ChatArea extends React.Component
         
       );
     }
-    
-    
-  }
+
 }
-export default ChatArea;
+
+
+
+// class ChatArea extends React.Component
+// {
+//   constructor(props)
+//   {
+//     super(props);
+
+//     this.userID = props.userID;
+//     this.username = props.username;
+//     this.chats = null;
+//     this.messages = null;
+//     this.messageInputRef = React.createRef();
+
+//   }
+
+
+//   componentDidUpdate()
+//   {
+//     this.messageInputRef.current.scrollTo(0, this.messageInputRef.current.scrollHeight);
+//   }
+
+//   render()
+//   {
+    
+
+    
+    
+    
+//   }
+// }
+// export default ChatArea;

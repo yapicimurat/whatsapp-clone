@@ -18,8 +18,9 @@ socket={this.socket}
 
 export default function ChatDetail(){
 
-
-  const {_id: chatID, roomName, ownerID, targetID, targetUser, ownerUser, messages} = useSelector(state => state.chatReducer.selectedChat);
+  const chat = useSelector(state => state.chatReducer.selectedChat);
+  const {_id: chatID, roomName, ownerID, targetID, targetUser, ownerUser, messages} = chat;
+  console.log(chat);
   const targetUsername = targetUser[0].username;
   
   // isLogged: false,
@@ -41,7 +42,8 @@ export default function ChatDetail(){
           username={username}
           messages={messages}/>
       </div>
-      <ChatDetailBottom 
+      <ChatDetailBottom  
+        chat={chat}
         userID={userID}
         username={username}/>
     </div>
