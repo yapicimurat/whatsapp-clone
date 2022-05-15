@@ -1,41 +1,43 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React,{useEffect} from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {addMessage} from "../../features/chat/chat";
 import UserInformation from "../User/UserInformation";
 import ChatArea from "./ChatArea";
 import ChatDetailBottom from "./ChatDetailBottom";
 
 
-
-/*
-PROPS
-userID={this.userID}
-username={this.username}
-chats={this.chats}
-getSelectedChatInformations={this.getSelectedChatInformations}
-socket={this.socket}
-*/
-
-
 export default function ChatDetail(){
 
-  const chat = useSelector(state => state.chatReducer.selectedChat);
-  const {_id: chatID, roomName, ownerID, targetID, targetUser, ownerUser, messages} = chat;
-  console.log(chat);
-  const targetUsername = targetUser[0].username;
+  const selectedChat = useSelector(state => state.chatReducer.selectedChat);
+
+  const {ownerID, targetID, targetUser, ownerUser, messages} = selectedChat;
+
+  const {id: userID, username, socket} = useSelector(state => state.userReducer);
   
-  // isLogged: false,
-  //   isSocketConnected: false,
-  //   id: undefined,
-  //   username: undefined,
-  //   socketID: undefined
-  const {id: userID, username} = useSelector(state => state.userReducer);
-  
+  const accordingToThisClientTargetUser = (userID === ownerID) ? targetUser[0] : ownerUser[0];
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+
+    socket.on("CLIENT-ROOM_MESSAGE", data => {
+      dispatch(addMessage({
+        _id: data.messageID,
+        chatID: data.chatID,
+        datatime: data.datetime,
+        message: data.message,
+        targetID: data.targetID,
+        ownerID: data.ownerID,
+        roomName: data.roomName,
+      }));
+    });
+  }, []);
   
   return (
     <div className="chat-detail-area">
       <UserInformation
         userID={targetID}
-        username={targetUsername}/>
+        username={accordingToThisClientTargetUser.username}/>
       <div className="chat-detail">
         <ChatArea
           userID={userID}
@@ -43,64 +45,11 @@ export default function ChatDetail(){
           messages={messages}/>
       </div>
       <ChatDetailBottom  
-        chat={chat}
+        chat={selectedChat}
         userID={userID}
-        username={username}/>
+        username={username}
+        socket={socket}
+        />
     </div>
   );
-
-};
-// class ChatDetail extends React.Component {
-//   constructor(props) {
-//     super(props);
-    
-//     this.userID = props.userID;
-//     this.username = props.username;
-//     this.chats = null;
-
-//     this.chatID = null;
-//     this.targetUserID = null;
-//     this.targetUsername = null;
-
-//   }
-
-
-//   render() {
-//     const {chatID, roomName, targetUserID, targetUsername} = this.props.getSelectedChatInformations();
-//     this.chatID = chatID;
-//     this.roomName = roomName;
-//     this.targetUsername = targetUsername;
-//     this.targetUserID = targetUserID;
-
-//     this.chats = this.props.chats;
-    
-//     return (
-//       <div className="chat-detail-area">
-//         <UserInformation
-//           userID={this.targetUserID}
-//           username={this.targetUsername}
-//         />
-//         <div className="chat-detail">
-//           <ChatArea
-//             userID={this.userID}
-//             username={this.username}
-//             chats={this.chats}
-//             getSelectedChatInformations={this.props.getSelectedChatInformations}
-//             socket={this.props.socket}
-//           />
-//         </div>
-//         <ChatDetailBottom 
-//           userID={this.props.userID}
-//           username={this.props.username}
-//           socket={this.props.socket}
-//           getSelectedChatInformations={this.props.getSelectedChatInformations}
-//         />
-//       </div>
-//     );
-    
-
-//   }
-
-
-// }
-// export default ChatDetail;
+}

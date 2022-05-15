@@ -1,64 +1,61 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
-import React from "react";
-
+import React, {useState} from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { addChat } from "../../features/chat/chat";
 import axios from "axios";
-class ChatListFilter extends React.Component {
-  constructor(props) {
-    super(props);
+import { API_TYPES } from "../../app/api/api"; 
+import socketConfig from "../../app/socket/config";
+export default function ChatListFilter(){
 
 
-    this.state = {
-      filter: ""
-    }
+  const [filter, setFilter] = useState("");
+  const {id: userID, username, socket} = useSelector(state => state.userReducer);
+  const dispatch = useDispatch();
 
-    this.changeEvent = this.changeEvent.bind(this);
-    this.submitForm = this.submitForm.bind(this);
-    this.createNewChat = this.createNewChat.bind(this);
 
+  const changeEvent = (e) => {
+    setFilter(e.target.value);
   }
 
-  changeEvent(event) {
-    this.setState({
-      filter: event.target.value
-    });
-    this.props.setFilterText(event.target.value);
-  }
-
-
-  submitForm(e){
+  const submitForm = (e) => {
     e.preventDefault();
   }
+  
 
+  const createNewChat = () => {
 
-
-  createNewChat(){
-    const filterText = this.state.filter;
-    if(filterText != ""){
+    
+    if(filter !== ""){
       //create-chat targeID yerine targetUsernam istemeli!!!
       //gelen istek sonucunda roomName'a join ol!!!
-      if(filterText == this.props.username){
+      if(filter === username){
         alert("You can not chat with yourself.");
-        this.setState({
-          filter: ""
-        });
-        this.props.setFilterText("");
+        setFilter("");
       }else{
         if(window.confirm("Are you sure you want to chat with this user?")){
-          axios.get(`http://localhost:3005/create-chat?ownerID=${this.props.userID}&targetUsername=${this.state.filter}`)
+          axios.get(API_TYPES.CREATE_NEW_CHAT(userID, filter))
           .then(response => {
             const {error, message, value} = response.data;
-            if(error == false )
+            if(error === false )
             {
               //server'a bilgi gonder ve karsi tarafa'da bilgiler gitsin
               const chat = value.chats.filter((chat) => {
-                return (chat.targetUser[0].username == this.state.filter)
+                return (chat.targetUser[0].username === filter)
               });
-              this.props.socket.emit("SERVER-CONNECT_ALL_OF-ROOMS", {
+              
+              socket.emit(socketConfig.ACTIONS.SERVER_NEW_CHAT,{chat: chat});
+
+              socket.emit(socketConfig.ACTIONS.SERVER_CONNECT_ROOMS, {
                 roomNames: [chat[0].roomName]
               });
-              this.props.socket.emit("SERVER-NEW_CHAT",{chat: chat});
-              this.props.applyChats(value.chats);
+              
+
+              //bu eski sistemde chat listesine ekleme yapıyordu
+              //yeni sisteme uygun olarak redux ile ekleme yap...
+              dispatch(addChat(
+                chat[0]
+              ));
             }
             else{
               alert(message);
@@ -75,28 +72,23 @@ class ChatListFilter extends React.Component {
     }
   }
 
-  render() {
-    return (
-      <form
-        className="chat-list-filter"
-        onSubmit={this.submitForm}
-        >
-        <FontAwesomeIcon className="chat-filter-search-icon" icon={icons.faSearch} />
-        <input
-          type="text"
-          placeholder="Search a chat or create a new chat..."
-          value={this.state.filter}
-          onChange={this.changeEvent}
-        />
-        <button
-          className="add-user"
-          title="Send request to add new friend"
-          onClick={this.createNewChat}
-        ><FontAwesomeIcon icon={icons.faUserPlus} /></button>
-      </form>
-    );
-  }
-
-
+  return (
+    <form
+      className="chat-list-filter"
+      onSubmit={submitForm}
+      >
+      <FontAwesomeIcon className="chat-filter-search-icon" icon={icons.faSearch} />
+      <input
+        type="text"
+        placeholder="Search a chat or create a new chat..."
+        value={filter}
+        onChange={changeEvent}
+      />
+      <button
+        className="add-user"
+        title="Send request to add new friend"
+        onClick={createNewChat}
+      ><FontAwesomeIcon icon={icons.faUserPlus} /></button>
+    </form>
+  );
 }
-export default ChatListFilter;

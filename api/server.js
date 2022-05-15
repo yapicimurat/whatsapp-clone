@@ -140,7 +140,6 @@ io.on("connection", (socket) => {
 
 
     socket.on("SERVER-CONNECT_ALL_OF-ROOMS",(data) => {
-        console.log(data);
         data.roomNames.forEach(roomName => {
             socket.join(roomName);
         });
@@ -149,8 +148,6 @@ io.on("connection", (socket) => {
     socket.on("SERVER-MESSAGE_TO_ROOM",(data) => {
         socket.join(data.roomName);
         io.to(data.roomName).emit("CLIENT-ROOM_MESSAGE",data);
-       
-
         
     });
 

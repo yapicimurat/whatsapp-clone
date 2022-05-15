@@ -12,32 +12,19 @@ import clsx from "clsx";
 
 
 export default function ChatListInformation({ chat }) {
-
-
-  /*
-  YARDIMCILAR....
-    -- GONDERİLEN PROPS'LAR
-    --------------------------------------
-    ownerID={chat.ownerID}
-    targetID={chat.targetID}
-    chatUsername={chatUsername}
-    lastMessage={(chat.messages.length > 0) ? chat.messages[chat.messages.length - 1].message : null}
-    lastMessageDatetime={(chat.messages.length > 0) ? chat.messages[chat.messages.length - 1].datetime : null}
-  */
-
   const dispatch = useDispatch();
+
   const { id: userId, username } = useSelector(state => state.userReducer);
+  const selectedChat = useSelector(state => state.chatReducer.selectedChat);
 
   //prop'dan gelen chatId ile reducerdaki chat'i bul...
   const COUNT_OF_MESSAGES = chat.messages.length;
   
 
-  
 
   const classNameChatListInformation = clsx({
     "chat-list-information": true,
-    //chat-list-information-active => chat secilme yapildiginda ayarlanacak...!!!!
-    "chat-list-information-active": false
+    "chat-list-information-active": (selectedChat !== null && selectedChat._id === chat._id)
   });
 
 
@@ -64,7 +51,6 @@ export default function ChatListInformation({ chat }) {
   const clickChat = () => {
     dispatch(setSelectedChat(chat));
   }
-
 
   return (
     <div className={classNameChatListInformation} onClick={clickChat}>

@@ -1,6 +1,8 @@
 //REACT
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import socketConfig from "../../app/socket/config";
+import {addChat} from "../../features/chat/chat";
 //END REACT...
 
 
@@ -15,40 +17,50 @@ export default function ChatList() {
 
   const chats = useSelector(state => state.chatReducer.chats);
 
-  const {id: userID, username} = useSelector(state => state.userReducer);
-
-  /*
-  isLogged: false,
-  isSocketConnected: false,
-  id: undefined,
-  username: undefined,
-  socketID: undefined
-  */
-  
-
+  console.log(chats);
+  const { id: userID, username, socket} = useSelector(state => state.userReducer);
+  const dispatch = useDispatch();
   //chat gecmisi mevcut ise;
-  if (Array.isArray(chats) && chats.length > 0) {
-    return (
-      <div className="chat-list-area">
-        <UserInformation
-          id={userID}
-          username={username}
-        />
-        <ChatListFilter/>
-        <div className="chat-list">
-          {
-            chats.map((chat) => {
-              return <ChatListInformation
-                key={chat._id}
-                chat={chat}/>
-            })
-          }
-        </div>
-      </div>
-    );
-  } else {
+  //if (Array.isArray(chats) && chats.length > 0) {
 
-  }
+
+  useEffect(() => {
+    socket.on(socketConfig.ACTIONS.CLIENT_NEW_CHAT, data => {
+      //asagidaki kod socket'e bu client icin yeni odaya baglanmasini ve chat listesini yenilemesini sagliyor
+      socket.emit(socketConfig.ACTIONS.SERVER_CONNECT_ROOMS, {
+        roomNames: [data.chat[0].roomName]
+      });
+
+      dispatch(addChat(data.chat[0]));
+
+    });
+  }, []);
+
+
+  const chatList = (Array.isArray(chats) && chats.length > 0) ?
+    chats.map((chat) => {
+      return <ChatListInformation
+        key={chat._id}
+        chat={chat} />
+    }) : (
+      <div className="no-chat">You don't have any chat...</div>
+    )
+
+  return (
+    <div className="chat-list-area">
+      <UserInformation
+        id={userID}
+        username={username}
+      />
+      <ChatListFilter />
+      <div className="chat-list">
+        {
+          chatList
+        }
+      </div>
+    </div>
+  );
+  // }
 
 
 

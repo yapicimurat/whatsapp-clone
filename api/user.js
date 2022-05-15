@@ -33,7 +33,6 @@ module.exports = class User {
                 if (data.length > 0) {
                     result.value.login = data;
                     result.message.login = "Login successfull.";
-                    console.log(result.value);
                     let userID = result.value.login[0]._id;
                     (async () => {
                         return await ModelChat.aggregate(
@@ -286,7 +285,6 @@ module.exports = class User {
             res.json(result);
         });
 
-        console.log(result);
     }
 
     static async getChatList(userID, res) {

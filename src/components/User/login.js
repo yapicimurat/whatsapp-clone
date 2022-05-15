@@ -19,6 +19,7 @@ import LoginService from "../../User/loginService";
 
 //SOCKET IMPORTS
 import { connectSocket } from "../../app/socket/socket";
+import socketConfig from "../../app/socket/config";
 
 //END SOCKET IMPORTS...
 
@@ -51,6 +52,10 @@ export default function Login(props) {
   const setStates = (response) => {
     connectSocket()
       .then(socket => {
+        
+        socket.emit(socketConfig.ACTIONS.SERVER_CONNECT_ROOMS, {
+          roomNames: response.chats.map(chat => chat.roomName)
+        });
 
         dispatch(setUser({
           isLogged: true,
@@ -65,7 +70,6 @@ export default function Login(props) {
       })
       .catch(error => {
         setIsConnectingSocket(false);
-        console.log(error);
       });
   }
 
