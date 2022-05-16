@@ -98,7 +98,9 @@ export default function Login(props) {
         <label>Password</label>
         <input type="password" name="password" value={password} onChange={changeValue} />
         <button className="login-button"><FontAwesomeIcon icon={icons.faSignIn} /> Login</button>
-        <small>Are you not registered? <a href="/register">Register now</a></small>
+        <small>Are you not registered? <a onClick={() => {
+          navigate("/register")
+        }}>Register now</a></small>
       </form>
     </div>
   );

@@ -5,6 +5,12 @@
     box-sizing: border-box;
     font-family: 'Merriweather', serif;
 }
+
+a{
+    color: #0000ff;
+    text-decoration: underline;
+    cursor: pointer;
+}
 body{
     height: 100vh;
     width: 100vw;
@@ -306,15 +312,6 @@ button.add-user:hover{
     padding-right: 10px;
     font-weight: 600;
 }
-
-/*
-<div className="message-row">
-    <div className="message-area me">
-        <div className="message">SELAM, NASILSIN</div>
-        <div className="message-time">11:03</div>
-    </div>
-</div>
-*/
 
 .message-row{
     width: 100%;

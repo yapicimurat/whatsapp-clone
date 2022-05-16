@@ -38,7 +38,7 @@ export default function ChatList() {
       dispatch(addChatMessage({
         _id: data.messageID,
         chatID: data.chatID,
-        datatime: data.datetime,
+        datetime: data.datetime,
         message: data.message,
         targetID: data.targetID,
         ownerID: data.ownerID,

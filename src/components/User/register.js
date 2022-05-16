@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
 import RegisterService from "../../User/registerService";
@@ -12,6 +12,8 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [passwordVerify, setPasswordVerify] = useState("");
   
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -26,7 +28,7 @@ export default function Register() {
       new RegisterService().register(username, password)
         .then(data => {
           alert(data);
-          window.location.href = "/login";
+          navigate("/login");
         })
         .catch(err => {
           alert(err);
@@ -55,7 +57,9 @@ export default function Register() {
         <label>Password verify</label>
         <input type="password" name="passwordVerify" value={passwordVerify} onChange={changeValue} />
         <button className="login-button"><FontAwesomeIcon icon={icons.faUserPlus} /> register</button>
-        <small>Are you registered? <a href="/login">Login now</a></small>
+        <small>Are you registered? <a onClick={() => {
+          navigate("/login")
+        }}>Login now</a></small>
       </form>
     </div>
   );

@@ -1,11 +1,16 @@
-import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 import "../../assets/css/style.css";
 export default function NotFound() {
+
+    const navigate = useNavigate();
+
 
     return (
         <div className="not-found">
             <h1>404 Not Found</h1>
-            <a href="/login">Go To Login Page</a>
+            <a onClick={() => {
+                navigate("/login")
+            }}>Go To Login Page</a>
         </div>
     );
 }

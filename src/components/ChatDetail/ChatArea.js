@@ -33,6 +33,7 @@ export default function ChatArea({userID, username, messages}){
               */
               const isOwner = (message.ownerID == userID) ? true : false;
               if(isOwner){
+
                 return <Chat
                   key={message._id}
                   type="me"
