@@ -1,10 +1,10 @@
 import React,{useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {addMessage} from "../../features/chat/chat";
+import {addSelectedChatMessage} from "../../features/chat/chat";
 import UserInformation from "../User/UserInformation";
 import ChatArea from "./ChatArea";
 import ChatDetailBottom from "./ChatDetailBottom";
-
+import socketConfig from "../../app/socket/config";
 
 export default function ChatDetail(){
 
@@ -17,11 +17,11 @@ export default function ChatDetail(){
   const accordingToThisClientTargetUser = (userID === ownerID) ? targetUser[0] : ownerUser[0];
 
   const dispatch = useDispatch();
+  
 
   useEffect(() => {
-
-    socket.on("CLIENT-ROOM_MESSAGE", data => {
-      dispatch(addMessage({
+    socket.on(socketConfig.ACTIONS.CLIENT_RECEIVED_MESSAGE, data => {
+      dispatch(addSelectedChatMessage({
         _id: data.messageID,
         chatID: data.chatID,
         datatime: data.datetime,
@@ -32,6 +32,7 @@ export default function ChatDetail(){
       }));
     });
   }, []);
+  
   
   return (
     <div className="chat-detail-area">

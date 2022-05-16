@@ -2,9 +2,9 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import socketConfig from "../../app/socket/config";
-import {addChat} from "../../features/chat/chat";
+import {addChat, addChatMessage} from "../../features/chat/chat";
 //END REACT...
-
+import { addMessage } from "../../features/chat/chat";
 
 //COMPONENTS
 import UserInformation from "../User/UserInformation";
@@ -17,7 +17,6 @@ export default function ChatList() {
 
   const chats = useSelector(state => state.chatReducer.chats);
 
-  console.log(chats);
   const { id: userID, username, socket} = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
   //chat gecmisi mevcut ise;
@@ -34,6 +33,20 @@ export default function ChatList() {
       dispatch(addChat(data.chat[0]));
 
     });
+
+    socket.on(socketConfig.ACTIONS.CLIENT_RECEIVED_MESSAGE, data => {
+      dispatch(addChatMessage({
+        _id: data.messageID,
+        chatID: data.chatID,
+        datatime: data.datetime,
+        message: data.message,
+        targetID: data.targetID,
+        ownerID: data.ownerID,
+        roomName: data.roomName,
+      }));
+    });
+
+
   }, []);
 
 

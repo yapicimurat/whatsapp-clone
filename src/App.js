@@ -1,9 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./assets/css/style.css";
-import {addMessage} from "./features/chat/chat";
 import NotFound from "./components/User/NotFound";
-import socketConfig from "./app/socket/config";
 import {useSelector, useDispatch} from "react-redux";
 
 //APP SETTINGS

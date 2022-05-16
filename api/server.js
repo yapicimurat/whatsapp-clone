@@ -22,6 +22,7 @@ httpServer.listen(3005, () => {
 
 const User = require("./user");
 const Helper = require("./helper");
+const { Console } = require("console");
 const url = "mongodb://localhost:27017/whatsapp-clone";
 
 mongoose.connect(url)
@@ -148,7 +149,6 @@ io.on("connection", (socket) => {
     socket.on("SERVER-MESSAGE_TO_ROOM",(data) => {
         socket.join(data.roomName);
         io.to(data.roomName).emit("CLIENT-ROOM_MESSAGE",data);
-        
     });
 
 
