@@ -4,11 +4,12 @@ const settings = {
         {
             path: "/",
             exact: true,
-            component: <Welcome operation="welcome"/>,
-            needAuth: false
+            component: <Welcome operation="chat"/>,
+            alternativeComponent: <Welcome operation="login"/>,
+            needAuth: true
         },
         {
-            path: "/welcome",
+            path: "/information",
             exact: true,
             component: <Welcome operation="welcome"/>,
             needAuth: false
@@ -29,6 +30,7 @@ const settings = {
             path: "/chat",
             exact: true,
             component: <Welcome operation="chat"/>,
+            alternativeComponent: <Welcome operation="login"/>,
             needAuth: true
         }
     ]

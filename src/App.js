@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./assets/css/style.css";
 import NotFound from "./components/User/NotFound";
-import {useSelector, useDispatch} from "react-redux";
+import {useSelector} from "react-redux";
 
 //APP SETTINGS
 
@@ -14,10 +14,7 @@ export default function App(){
 
   const {routes} = settings;
 
-  const {isLogged, isSocketConnected, socket} = useSelector(state => state.userReducer);
-  const dispatch = useDispatch();
-
-  
+  const {isLogged, isSocketConnected} = useSelector(state => state.userReducer);
 
 
   return (
@@ -26,10 +23,13 @@ export default function App(){
         {
           routes.map((route, index) => {
             if(!route.needAuth){
-              return <Route key={index}  exact={route.exact} path={route.path} element={route.component}></Route>
+              return <Route key={index} exact={route.exact} path={route.path} element={route.component}></Route>
             }
             else if(route.needAuth && (isLogged && isSocketConnected)){
               return <Route key={index}  exact={route.exact} path={route.path} element={route.component}></Route> 
+            }
+            else if(route.needAuth && !(isLogged && isSocketConnected)){
+              return <Route key={index} exact={route.exact} path={route.path} element={route.alternativeComponent}></Route>
             }
             else{
               return <Route key={index} exact path="*" element={<NotFound/>}/>

@@ -1,2 +1,6 @@
-# whatsapp-clone
-WhatsApp Clone Project with React and Socket.io
+# WhatsApp-Clone Web Project
+* React JS
+* Socket.io
+* Express JS
+* MongoDB
+* Redux Toolkit
