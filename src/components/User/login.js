@@ -34,7 +34,7 @@ export default function Login(props) {
  
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (username == "" || password == "") {
+    if (username === "" || password === "") {
       alert("Please enter all of informations.");
     }
     else {
@@ -65,7 +65,7 @@ export default function Login(props) {
         }));
         
         dispatch(setChats(response.chats));
-         
+         console.log(response);
         navigate("/chat");
       })
       .catch(error => {

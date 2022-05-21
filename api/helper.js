@@ -16,7 +16,8 @@ module.exports = class Helper
     {
         return {
             error: false,
-            message: ""
+            message: {},
+            result: {}
         }
     }
 

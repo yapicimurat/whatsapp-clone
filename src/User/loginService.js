@@ -12,31 +12,25 @@ export default class LoginService {
     }
 
     login(username, password) {
-        return axios.get(API_TYPES.LOGIN(username, password))
+        return axios.post(API_TYPES.LOGIN(username, password), {
+            username: username,
+            password: password
+        })
             .then(res => {
-                const { data } = res;
-                if (!data.error) {
-                    /*
-                      response uzerinden alinmasi gereken bilgileri
-                      userID                => data.value.login[0]._id
-                      username              => data.value.login[0].username
-                      chats                 => data.value.chats (array)
-                          chatID            => data.value.chats[i]._id;
-                          roomName          => data.value.chats[i].roomName;
-                          ownerID           => data.value.chats[i].ownerUser[0]._id
-                          ownerUsername     => data.value.chats[i].ownerUser[0].username
-                          targetID          => data.value.chats[i].targetUser[0]._id
-                          targetUsername    => data.value.chats[i].targetUser[0].username
-                          messages          => data.value.chats[i].messages
-                    */
-                    return Promise.resolve({
-                        userID: data.value.login[0]._id,
-                        username: data.value.login[0].username,
-                        chats: data.value.chats
-                    });
+                const { result, message, error } = res.data;
+                if (!error) {
+                    if(result.login !== null){
+                        return Promise.resolve({
+                            userID: result.login._id,
+                            username: result.login.username,
+                            chats: result.chats
+                        });
+                    }else{
+                        return Promise.reject(message.login);
+                    }
                 }
                 else {
-                    return Promise.reject(data.message.login);
+                    return Promise.reject(message.login);
                 }
             })
             .catch(error => {
