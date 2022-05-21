@@ -4,7 +4,6 @@ import Chat from "./Chat";
 export default function ChatArea({userID, username, messages}){
 
   const chatArea = useRef();
-  //this.messageInputRef.current.scrollTo(0, this.messageInputRef.current.scrollHeight);
 
   useEffect(() => {
     chatArea.current.scrollTo(0, chatArea.current.scrollHeight);

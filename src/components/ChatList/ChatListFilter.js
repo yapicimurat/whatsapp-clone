@@ -1,16 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addChat } from "../../features/chat/chat";
 import axios from "axios";
-import { API_TYPES } from "../../app/api/api"; 
+import { API_TYPES } from "../../app/api/api";
 import socketConfig from "../../app/socket/config";
-export default function ChatListFilter(){
+export default function ChatListFilter() {
 
 
   const [filter, setFilter] = useState("");
-  const {id: userID, username, socket} = useSelector(state => state.userReducer);
+  const { id: userID, username, socket } = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
 
@@ -21,53 +21,63 @@ export default function ChatListFilter(){
   const submitForm = (e) => {
     e.preventDefault();
   }
-  
+
 
   const createNewChat = () => {
 
-    
-    if(filter !== ""){
+
+    if (filter !== "") {
       //create-chat targeID yerine targetUsernam istemeli!!!
       //gelen istek sonucunda roomName'a join ol!!!
-      if(filter === username){
+      if (filter === username) {
         alert("You can not chat with yourself.");
         setFilter("");
-      }else{
-        if(window.confirm("Are you sure you want to chat with this user?")){
-          axios.get(API_TYPES.CREATE_NEW_CHAT(userID, filter))
-          .then(response => {
-            const {error, message, value} = response.data;
-            if(error === false )
-            {
-              //server'a bilgi gonder ve karsi tarafa'da bilgiler gitsin
-              const chat = value.chats.filter((chat) => {
-                return (chat.targetUser[0].username === filter)
-              });
-              
-              socket.emit(socketConfig.ACTIONS.SERVER_NEW_CHAT,{chat: chat});
-
-              socket.emit(socketConfig.ACTIONS.SERVER_CONNECT_ROOMS, {
-                roomNames: [chat[0].roomName]
-              });
-              
-
-              //bu eski sistemde chat listesine ekleme yapıyordu
-              //yeni sisteme uygun olarak redux ile ekleme yap...
-              dispatch(addChat(
-                chat[0]
-              ));
-            }
-            else{
-              alert(message);
-            }
+      } else {
+        if (window.confirm("Are you sure you want to chat with this user?")) {
+          axios.post(API_TYPES.CREATE_NEW_CHAT(), {
+            ownerID: userID,
+            targetUsername: filter
           })
-          .catch(error => {
-            alert(error.message);
-          });
+            .then(response => {
+              const { error, message, result } = response.data;
+              console.log(response);
+              if (!error) {
+
+                if (result !== null) {
+                  //server'a bilgi gonder ve karsi tarafa'da bilgiler gitsin
+                  const chat = result;
+                  console.log(chat)
+
+                  socket.emit(socketConfig.ACTIONS.SERVER_NEW_CHAT, { chat: chat });
+
+                  socket.emit(socketConfig.ACTIONS.SERVER_CONNECT_ROOMS, {
+                    roomNames: [chat.roomName]
+                  });
+
+                  dispatch(addChat(
+                    chat[0]
+                  ));
+                }else{
+                  alert(message);
+                }
+
+
+
+                //bu eski sistemde chat listesine ekleme yapıyordu
+                //yeni sisteme uygun olarak redux ile ekleme yap...
+                
+              }
+              else {
+                alert(message);
+              }
+            })
+            .catch(error => {
+              alert(error.message);
+            });
         }
       }
-      
-    }else{
+
+    } else {
       alert("Please enter username of your friend.");
     }
   }
@@ -76,7 +86,7 @@ export default function ChatListFilter(){
     <form
       className="chat-list-filter"
       onSubmit={submitForm}
-      >
+    >
       <FontAwesomeIcon className="chat-filter-search-icon" icon={icons.faSearch} />
       <input
         type="text"

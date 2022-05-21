@@ -15,21 +15,25 @@ export default class RegisterService{
 
 
     register(username, password){
-        return axios.get(API_TYPES.REGISTER(username, password))
+        return axios.post(API_TYPES.REGISTER(),{
+            username: username,
+            password: password
+        })
         .then(res => {
-            const {data} = res;
-            if(!data.error){
-              return Promise.resolve(data.message);
-            }
-            else
-            {
-              return Promise.reject(data.message);
+            const {error, message, result} = res.data;
+            if(!error){
+                if(result !== null){
+                    return Promise.resolve(message);
+                }else{
+                    return Promise.reject(message);
+                }
+            }else{
+                return Promise.reject(message);
             }
         })
         .catch(error => {
             return Promise.reject(error);
         });
     }
-
 
 }
