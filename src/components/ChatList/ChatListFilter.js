@@ -40,13 +40,11 @@ export default function ChatListFilter() {
           })
             .then(response => {
               const { error, message, result } = response.data;
-              console.log(response);
               if (!error) {
 
                 if (result !== null) {
                   //server'a bilgi gonder ve karsi tarafa'da bilgiler gitsin
                   const chat = result;
-                  console.log(chat)
 
                   socket.emit(socketConfig.ACTIONS.SERVER_NEW_CHAT, { chat: chat });
 

@@ -1,7 +1,7 @@
 //REACT IMPORTS
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 //END REACT IMPORTS
 
 //REDUCERS....
@@ -31,7 +31,7 @@ export default function Login(props) {
   //redux
   const dispatch = useDispatch();
   const isSocketConnected = useSelector(state => (state.userReducer.socket != null) ? state.userReducer.socket.connected : false);
- 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (username === "" || password === "") {
@@ -52,7 +52,7 @@ export default function Login(props) {
   const setStates = (response) => {
     connectSocket()
       .then(socket => {
-        
+
         socket.emit(socketConfig.ACTIONS.SERVER_CONNECT_ROOMS, {
           roomNames: response.chats.map(chat => chat.roomName)
         });
@@ -63,9 +63,8 @@ export default function Login(props) {
           username: response.username,
           id: response.userID
         }));
-        
+
         dispatch(setChats(response.chats));
-         console.log(response);
         navigate("/chat");
       })
       .catch(error => {
@@ -81,7 +80,7 @@ export default function Login(props) {
       setPasswordState(e.target.value);
     }
   }
-  
+
   return (
     <div className="login-register">
       <form onSubmit={handleSubmit}>
