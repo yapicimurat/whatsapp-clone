@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { API_TYPES } from "../../app/api/api";
 import socketConfig from "../../app/socket/config";
+
+
 export default function ChatDetailBottom({ chat, userID, username, socket }) {
 
   //state
