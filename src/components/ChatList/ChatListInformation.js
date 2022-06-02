@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import {setSelectedChat} from "../../features/chat/chat";
+import { setSelectedChat } from "../../features/chat/chat";
 
 import UserDefaultImage from "../../assets/images/user-image.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,7 +19,7 @@ export default function ChatListInformation({ chat }) {
 
   //prop'dan gelen chatId ile reducerdaki chat'i bul...
   const COUNT_OF_MESSAGES = chat.messages.length;
-  
+
 
 
   const classNameChatListInformation = clsx({
@@ -43,7 +43,7 @@ export default function ChatListInformation({ chat }) {
     hour: "2-digit",
     minute: "2-digit"
   });
-  
+
   const classNameLastMessage = clsx({
     "chat-detail-last-message": true,
     "no-dialog": (COUNT_OF_MESSAGES === 0)

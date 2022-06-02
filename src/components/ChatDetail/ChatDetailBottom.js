@@ -33,7 +33,6 @@ export default function ChatDetailBottom({ chat, userID, username, socket }) {
                 targetID: result.targetID,
                 datetime: result.datetime
               });
-
             })
             .catch(error => {
               alert(error.message);

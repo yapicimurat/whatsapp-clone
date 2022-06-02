@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addChat } from "../../features/chat/chat";
+import { addChat, filterChat } from "../../features/chat/chat";
 import axios from "axios";
 import { API_TYPES } from "../../app/api/api";
 import socketConfig from "../../app/socket/config";
@@ -16,6 +16,9 @@ export default function ChatListFilter() {
 
   const changeEvent = (e) => {
     setFilter(e.target.value);
+
+    dispatch(filterChat(e.target.value));
+
   }
 
   const submitForm = (e) => {
@@ -34,36 +37,23 @@ export default function ChatListFilter() {
         setFilter("");
       } else {
         if (window.confirm("Are you sure you want to chat with this user?")) {
-          axios.post(API_TYPES.CREATE_NEW_CHAT(), {
-            ownerID: userID,
-            targetUsername: filter
-          })
+          axios.get(API_TYPES.CREATE_NEW_CHAT(userID, filter))
             .then(response => {
               const { error, message, result } = response.data;
               if (!error) {
-
                 if (result !== null) {
-                  //server'a bilgi gonder ve karsi tarafa'da bilgiler gitsin
                   const chat = result;
-
                   socket.emit(socketConfig.ACTIONS.SERVER_NEW_CHAT, { chat: chat });
 
                   socket.emit(socketConfig.ACTIONS.SERVER_CONNECT_ROOMS, {
                     roomNames: [chat.roomName]
                   });
-
-                  dispatch(addChat(
-                    chat[0]
-                  ));
-                }else{
+                  dispatch(addChat(chat));
+                } else {
                   alert(message);
                 }
 
 
-
-                //bu eski sistemde chat listesine ekleme yapıyordu
-                //yeni sisteme uygun olarak redux ile ekleme yap...
-                
               }
               else {
                 alert(message);

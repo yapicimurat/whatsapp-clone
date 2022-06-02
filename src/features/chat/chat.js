@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     chats: null,
-    selectedChat: null
+    selectedChat: null,
+    filter: ""
 };
 
 export const chatSlice = createSlice({
@@ -18,7 +19,6 @@ export const chatSlice = createSlice({
         },
         addSelectedChatMessage: (state, action) => {
             if(state.selectedChat !== null && action.payload.chatID === state.selectedChat._id){
-                
                 state.selectedChat.messages.push(action.payload);
             }
         },
@@ -27,11 +27,11 @@ export const chatSlice = createSlice({
             chat.messages.push(action.payload);
 
         },
-        setSelectedChat: (state, action) => {
-            state.selectedChat = action.payload;
+        filterChat: (state, action) => {
+            state.filter = action.payload;
         }
     }
 });
 
-export const { setChats, setSelectedChat, addChatMessage, addSelectedChatMessage, addChat } = chatSlice.actions;
+export const { setChats, setSelectedChat, addChatMessage, addSelectedChatMessage, addChat, filterChat } = chatSlice.actions;
 export default chatSlice.reducer;

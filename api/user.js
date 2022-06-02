@@ -160,7 +160,39 @@ module.exports = class User {
                             ownerID: userId,
                             targetID: targetId
                         }).save();
-                        result.result = newChat;
+
+                        const chat = await ModelChat.aggregate([
+                            {
+                                "$match":{
+                                    _id: mongoose.Types.ObjectId(newChat._id)
+                                }
+                            },
+                            {
+                                "$lookup": {
+                                    from: "messages",
+                                    localField: "_id",
+                                    foreignField: "chatID",
+                                    as: "messages"
+                                }
+                            },
+                            {
+                                "$lookup": {
+                                    from: "users",
+                                    localField: "ownerID",
+                                    foreignField: "_id",
+                                    as: "ownerUser"
+                                }
+                            },
+                            {
+                                "$lookup": {
+                                    from: "users",
+                                    localField: "targetID",
+                                    foreignField: "_id",
+                                    as: "targetUser"
+                                }
+                            }
+                        ]);
+                        result.result = chat[0];
                         result.message = "New chat is created.";
                         res.json(result);
                     }
@@ -230,7 +262,7 @@ module.exports = class User {
 
     static async sendMessage(chatID, roomName, ownerID, targetID, message, res) {
         const result = Helper.DefaultResponse;
-        try{
+        try {
             const newMessage = await ModelMessage({
                 chatID: chatID,
                 ownerID: ownerID,
@@ -238,19 +270,18 @@ module.exports = class User {
                 roomName: roomName,
                 message: message
             }).save();
-            if(newMessage){
+            if (newMessage) {
                 result.message = "Message has been saved";
                 result.result = newMessage;
                 res.json(result);
             }
         }
-        catch(err){
+        catch (err) {
             result.error = true;
             result.message = err.message;
             res.json(result);
-
         }
-        
+
     }
 
 }

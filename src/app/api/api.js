@@ -11,8 +11,8 @@ const API_TYPES = {
     SEND_MESSAGE: (chatId, ownerId, targetId, message, roomName) => {
         return `${BASE_URL}send-message?chatID=${chatId}&ownerID=${ownerId}&targetID=${targetId}&message=${message}&roomName=${roomName}`;
     },
-    CREATE_NEW_CHAT: () => {
-        return `${BASE_URL}create-chat`;
+    CREATE_NEW_CHAT: (ownerId, targetUsername) => {
+        return `${BASE_URL}create-chat?ownerID=${ownerId}&targetUsername=${targetUsername}`;
     }
 };
 

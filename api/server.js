@@ -2,6 +2,7 @@
 
 const { createServer } = require("http");
 const express = require("express");
+const verifyToken = require("./middleware/verifyToken");
 const bodyParser = require("body-parser");
 const app = express();
 const mongoose = require("mongoose");
@@ -44,23 +45,28 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.post("/login", (req, res) => {
-    const {username, password} = req.body;
-    if(username && password){
-        User.login(username, password, res);
-    }else{
-        res.json({
-            error: true,
-            message: "Gerekli parametreler verilmedi."
-        });
-    }
+    const { username, password } = req.body;
+    //jwt.sign({ username: username }, 'secretKey', { algorithm: "HS256", expiresIn: "1min" }, (error, token) => {
+        if (username && password) {
+            User.login(username, password, res);
+        } else {
+            res.json({
+                error: true,
+                message: "Gerekli parametreler verilmedi."
+            });
+        }
+    //});
+
+
+
 });
 
 app.post("/register", (req, res) => {
-    const {username, password} = req.body;
+    const { username, password } = req.body;
 
-    if(username && password){
+    if (username && password) {
         User.register(username, password, res);
-    }else{
+    } else {
         res.json({
             error: true,
             message: "Gerekli parametreler verilmedi."
@@ -68,24 +74,24 @@ app.post("/register", (req, res) => {
     }
 });
 
-app.get("/chat-list",(req, res) => {
+app.get("/chat-list", verifyToken, (req, res) => {
     const parameters = req.query;
     if (!Helper.ParameterChecker(req.query, ["userID"])) {
         User.getChatList(parameters.userID, res);
     }
     else {
-        res.json({
-            error: true,
-            message: "Gerekli parametreler verilmedi."
-        });
+        // res.json({
+        //     error: true,
+        //     message: "Gerekli parametreler verilmedi."
+        // });
     }
 
 });
 
-app.post("/create-chat", (req, res) => {
-    const {ownerID, targetUsername} = req.body;
-    if (ownerID && targetUsername) {
-        User.createChat(ownerID, targetUsername, res);
+app.get("/create-chat", (req, res) => {
+    const parameters = req.query;
+    if (!Helper.ParameterChecker(req.query, ["ownerID", "targetUsername"])) {
+        User.createChat(parameters.ownerID, parameters.targetUsername, res);
     }
     else {
         res.json({
