@@ -37,7 +37,11 @@ export default function ChatListFilter() {
         setFilter("");
       } else {
         if (window.confirm("Are you sure you want to chat with this user?")) {
-          axios.get(API_TYPES.CREATE_NEW_CHAT(userID, filter))
+          axios.get(API_TYPES.CREATE_NEW_CHAT(userID, filter),{
+            headers: {
+              'Authorization': `Bearer ${JSON.parse(localStorage.getItem('userToken'))}`
+            }
+          })
             .then(response => {
               const { error, message, result } = response.data;
               if (!error) {

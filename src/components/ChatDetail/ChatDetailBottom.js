@@ -21,7 +21,11 @@ export default function ChatDetailBottom({ chat, userID, username, socket }) {
     if (e.keyCode == 13) {
       if (socket !== null && socket && socket.connected === true) {
         if (message !== "" && message !== null && message !== undefined) {
-          axios.get(API_TYPES.SEND_MESSAGE(chat._id, userID, targetUserID, message, roomName))
+          axios.get(API_TYPES.SEND_MESSAGE(chat._id, userID, targetUserID, message, roomName),{
+            headers: {
+              'Authorization': `Bearer ${JSON.parse(localStorage.getItem('userToken'))}`
+            }
+          })
             .then(response => {
               const {error, message, result} = response.data;
               socket.emit(socketConfig.ACTIONS.SERVER_MESSAGE_TO_ROOM, {
