@@ -12,7 +12,7 @@ module.exports = class User {
         this.datetime = null;
     }
 
-    static async login(username, password, res) {
+    static async login(username, password, res, token) {
         const result = Helper.DefaultResponse;
         try {
             const user = await ModelUser.findOne({
@@ -70,6 +70,7 @@ module.exports = class User {
 
                 result.message.login = "Login is successful.";
                 result.result.login = user;
+                result.result.token = token;
                 if (chat) {
                     result.result.chats = chat;
                     result.message.chats = `${chat.length} chat(s) is founded.`;
@@ -91,6 +92,74 @@ module.exports = class User {
             res.json(result);
         }
 
+    }
+
+    static async getUser(username, res){
+        const result = Helper.DefaultResponse;
+        try {
+            const user = await ModelUser.findOne({
+                $match: [
+                    {
+                        username: username
+                    }
+                ]
+            });
+            if (user) {
+                
+                const chat = await ModelChat.aggregate(
+                    [
+                        {
+                            $match: {
+                                $or: [
+                                    {
+                                        ownerID: user._id,
+                                    },
+                                    {
+                                        targetID: user._id
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "users",
+                                localField: "targetID",
+                                foreignField: "_id",
+                                as: "targetUser"
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "users",
+                                localField: "ownerID",
+                                foreignField: "_id",
+                                as: "ownerUser",
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "messages",
+                                localField: "_id",
+                                foreignField: "chatID",
+                                as: "messages",
+                            }
+                        }
+                    ]
+                );
+                result.result.login = user;
+                if (chat) {
+                    result.result.chats = chat;
+                    res.json(result);
+                } else {
+                    result.result.chats = null;
+                    res.json(result);
+                }
+            } else {
+                res.sendStatus(403);
+            }
+        } catch (err) {
+            res.sendStatus(403);
+        }
     }
 
     static async register(username, password, res) {

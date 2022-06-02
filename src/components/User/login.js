@@ -40,6 +40,7 @@ export default function Login(props) {
     else {
       new LoginService().login(username, password)
         .then(response => {
+          localStorage.setItem('userToken', JSON.stringify(response.token));
           setIsConnectingSocket(true);
           setStates(response);
         })
@@ -50,6 +51,7 @@ export default function Login(props) {
   }
 
   const setStates = (response) => {
+    
     connectSocket()
       .then(socket => {
 

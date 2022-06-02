@@ -20,11 +20,18 @@ export default class LoginService {
                 const { result, message, error } = res.data;
                 if (!error) {
                     if(result.login !== null){
+                        //connect socket...
+                        
+                        
                         return Promise.resolve({
                             userID: result.login._id,
                             username: result.login.username,
-                            chats: result.chats
+                            chats: result.chats,
+                            token: result.token
                         });
+
+
+
                     }else{
                         return Promise.reject(message.login);
                     }

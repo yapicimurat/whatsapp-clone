@@ -44,11 +44,24 @@ app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+app.get("/getUser", verifyToken, (req, res) => {
+    User.getUser(req.username, res);
+});
+
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
+    
     //jwt.sign({ username: username }, 'secretKey', { algorithm: "HS256", expiresIn: "1min" }, (error, token) => {
         if (username && password) {
-            User.login(username, password, res);
+            //create a token for user...
+            jwt.sign({username: username}, process.env.SECRET_KEY, {algorithm: "HS256", expiresIn: "1d"}, (err, token) => {
+                if(!err){
+                    User.login(username, password, res, token);
+                }else{
+                    
+                }
+            });
+            
         } else {
             res.json({
                 error: true,
@@ -88,7 +101,7 @@ app.get("/chat-list", verifyToken, (req, res) => {
 
 });
 
-app.get("/create-chat", (req, res) => {
+app.get("/create-chat", verifyToken, (req, res) => {
     const parameters = req.query;
     if (!Helper.ParameterChecker(req.query, ["ownerID", "targetUsername"])) {
         User.createChat(parameters.ownerID, parameters.targetUsername, res);
@@ -102,7 +115,7 @@ app.get("/create-chat", (req, res) => {
 
 });
 
-app.get("/send-message", (req, res) => {
+app.get("/send-message", verifyToken, (req, res) => {
     const parameters = req.query;
     if (!Helper.ParameterChecker(req.query, ["ownerID", "targetID", "chatID", "roomName", "message"])) {
         User.sendMessage(parameters.chatID, parameters.roomName, parameters.ownerID, parameters.targetID, parameters.message, res);
@@ -116,7 +129,7 @@ app.get("/send-message", (req, res) => {
 });
 
 
-app.get("/get-messages", (req, res) => {
+app.get("/get-messages", verifyToken, (req, res) => {
     const parameters = req.query;
 
     if (!Helper.ParameterChecker(req.query, ["chatID"])) {

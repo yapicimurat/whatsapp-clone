@@ -13,6 +13,9 @@ const API_TYPES = {
     },
     CREATE_NEW_CHAT: (ownerId, targetUsername) => {
         return `${BASE_URL}create-chat?ownerID=${ownerId}&targetUsername=${targetUsername}`;
+    },
+    GET_USER: () => {
+        return BASE_URL + `getUser`;
     }
 };
 

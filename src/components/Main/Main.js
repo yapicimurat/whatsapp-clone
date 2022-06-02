@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Link } from "react-router";
+import React from "react";
 import { useSelector } from "react-redux";
 
 //COMPONENTS
@@ -9,7 +8,6 @@ import ChatDetail from "../ChatDetail/ChatDetail";
 
 export default function Main() {
   const selectedChat = useSelector(state => state.chatReducer.selectedChat);
-
   return (
     <div className="app">
       <ChatList />

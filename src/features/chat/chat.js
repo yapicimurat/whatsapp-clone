@@ -29,6 +29,9 @@ export const chatSlice = createSlice({
         },
         filterChat: (state, action) => {
             state.filter = action.payload;
+        },
+        setSelectedChat: (state, action) => {
+            state.selectedChat = action.payload;
         }
     }
 });
