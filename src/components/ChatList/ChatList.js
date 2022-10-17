@@ -83,6 +83,7 @@ export default function ChatList() {
   return (
     <div className="chat-list-area">
       <UserInformation
+        type="user"
         id={userID}
         username={username}
       />

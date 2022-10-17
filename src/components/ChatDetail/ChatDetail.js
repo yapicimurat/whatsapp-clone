@@ -37,6 +37,7 @@ export default function ChatDetail(){
   return (
     <div className="chat-detail-area">
       <UserInformation
+        type="chat"
         userID={targetID}
         username={accordingToThisClientTargetUser.username}/>
       <div className="chat-detail">

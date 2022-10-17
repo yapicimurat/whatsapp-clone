@@ -1,11 +1,17 @@
 import React from "react";
-
+import {useNavigate} from "react-router-dom";
 
 import UserDefaultImage from "../../assets/images/user-image.png";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import * as icons from "@fortawesome/free-solid-svg-icons";
 
 export default function UserInformation({type, userID, username}){
+
+  const navigate = useNavigate();
+  const logout = (e) => {
+    localStorage.removeItem("userToken");
+    navigate("/login");
+  };
   return(
     <div className="user-information">
         <div className="user-image">
@@ -15,9 +21,9 @@ export default function UserInformation({type, userID, username}){
         {username}
         </div>
         { 
-          (typeof type != "undefined") ?  
+          (type !== "chat") ?  
           <div className="logout">
-            <button><FontAwesomeIcon icon={icons.faSignOut}/> Logout</button>
+            <button onClick={logout}><FontAwesomeIcon icon={icons.faSignOut}/> Logout</button>
           </div>: null
         }
     </div>
